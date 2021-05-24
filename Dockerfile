@@ -1,6 +1,6 @@
 # Based on: https://github.com/Cuda-Chen/mask-rcnn-docker
 
-FROM ubuntu:20.04
+FROM tensorflow/tensorflow:2.2.0-gpu-jupyter
 LABEL maintainer="Erik Vroon <erik.vroon22@gmail.com>"
 
 ENV TEMP_MRCNN_DIR /tmp/mrcnn
@@ -30,17 +30,14 @@ RUN pip3 --no-cache-dir install \
     numpy scipy scikit-image matplotlib Cython imgaug \
     tensorflow==2.2.0 pydot_ng keras pycocotools
 
-# Jupyter Notebook
-#
+# Jupyter Notebook.
 # Allow access from outside the container, and skip trying to open a browser.
 # NOTE: disable authentication token for convenience. DON'T DO THIS ON A PUBLIC SERVER.
-RUN pip3 --no-cache-dir install jupyter && \
-    mkdir /root/.jupyter && \
-    echo "c.NotebookApp.ip = '0.0.0.0'" \
-         "\nc.NotebookApp.open_browser = False" \
-         "\nc.NotebookApp.allow_root = True" \
-         "\nc.NotebookApp.token = ''" \
-         > /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.ip = '0.0.0.0'" \
+    "\nc.NotebookApp.open_browser = False" \
+    "\nc.NotebookApp.allow_root = True" \
+    "\nc.NotebookApp.token = ''" \
+    > /root/.jupyter/jupyter_notebook_config.py
 
 
 # OpenCV 4.5.0 + dependencies
@@ -50,8 +47,8 @@ RUN apt-get install -y --no-install-recommends \
     liblapacke-dev checkinstall
 
 # Get source from github and compile
-RUN git clone -b 4.5.0 --depth 1 https://github.com/opencv/opencv.git /usr/local/src/opencv
-RUN cd /usr/local/src/opencv && mkdir build && cd build && \
+RUN git clone -b 4.5.0 --depth 1 https://github.com/opencv/opencv.git /usr/local/src/opencv && \
+    cd /usr/local/src/opencv && mkdir build && cd build && \
     cmake -D CMAKE_INSTALL_PREFIX=/usr/local \
           -D BUILD_TESTS=OFF \
           -D BUILD_PERF_TESTS=OFF \
