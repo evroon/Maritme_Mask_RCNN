@@ -1,0 +1,25 @@
+name: docker-build
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    - cron: '00 4 * * 3'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: docker build -t $USER/maskrcnn:latest .
+
+    - name: Test docker run
+      run: docker run --rm --volume=$(pwd):/maskrcnn:rw --workdir=/maskrcnn $USER/maskrcnn:latest echo 'test'
