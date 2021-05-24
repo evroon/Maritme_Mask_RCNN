@@ -18,5 +18,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build and run
-      run: docker-compose run --service-ports maskrcnn echo 'test'
+    - name: Build
+      run: ./build_docker.sh
+
+    - name: Run
+      run: docker run --rm --volume=$(pwd):/maskrcnn:rw $USER/maskrcnn:latest echo 'test'
