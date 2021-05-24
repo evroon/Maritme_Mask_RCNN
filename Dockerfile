@@ -27,7 +27,8 @@ RUN apt-get install -y --no-install-recommends libjpeg-dev zlib1g-dev && \
 
 # Science libraries and other common packages
 RUN pip3 --no-cache-dir install \
-    numpy scipy scikit-image matplotlib Cython imgaug
+    numpy scipy scikit-image matplotlib Cython imgaug \
+    tensorflow==2.2.0 pydot_ng keras pycocotools
 
 # Jupyter Notebook
 #
@@ -42,12 +43,7 @@ RUN pip3 --no-cache-dir install jupyter && \
          > /root/.jupyter/jupyter_notebook_config.py
 
 
-# Install Python dependencies
-RUN pip3 install --no-cache-dir --upgrade tensorflow==2.2.0 pydot_ng keras pycocotools
-
-# OpenCV 4.5.0
-# Dependencies
-# libjasper-dev
+# OpenCV 4.5.0 + dependencies
 RUN apt-get install -y --no-install-recommends \
     libjpeg8-dev libtiff5-dev libpng-dev \
     libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libgtk2.0-dev \
@@ -67,8 +63,7 @@ RUN cd /usr/local/src/opencv && mkdir build && cd build && \
 RUN git clone https://github.com/leekunhee/Mask_RCNN.git $TEMP_MRCNN_DIR
 RUN git clone https://github.com/philferriere/cocoapi.git $TEMP_COCO_DIR
 
-RUN cd $TEMP_MRCNN_DIR && \
-    python3 setup.py install
+RUN cd $TEMP_MRCNN_DIR && python3 setup.py install
 
 RUN cd $TEMP_COCO_DIR/PythonAPI && \
     sed -i "s/\bpython\b/python3/g" Makefile && \
@@ -76,7 +71,7 @@ RUN cd $TEMP_COCO_DIR/PythonAPI && \
 
 RUN mkdir -p $MRCNN_DIR/coco
 
-WORKDIR "/mask-rcnn"
+WORKDIR /maskrcnn
 CMD ["/bin/bash"]
 
 # Expose port for tensorboard and jupyter notebook respectively
