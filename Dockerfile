@@ -74,3 +74,5 @@ CMD ["/bin/bash"]
 # Expose port for tensorboard and jupyter notebook respectively
 EXPOSE 6006
 EXPOSE 8888
+
+ENTRYPOINT [ "./entrypoint.sh" ]
