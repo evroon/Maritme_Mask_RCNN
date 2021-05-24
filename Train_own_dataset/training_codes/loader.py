@@ -1,6 +1,6 @@
 
 
-import os 
+import os
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -8,7 +8,7 @@ import JSON_parser
 
 categories_to_save = ['buoy', 'land', 'sea', 'ship', 'sky']
 
-dataset_path = "/home/adllo/others_git/Mask_RCNN/Train_own_dataset/maritime_dataset/"
+dataset_path = "/maskrcnn/Train_own_dataset/maritime_dataset/"
 image_list_path = "image_list.txt"
 image_list_path = os.path.join(dataset_path, image_list_path)
 
@@ -19,7 +19,7 @@ save_dir = dataset_path + "training"
 with open(image_list_path) as f:
     image_list = f.readlines()
 # Remove whitespaces
-image_list = [x.strip() for x in image_list] 
+image_list = [x.strip() for x in image_list]
 
 examples_with_cat = np.full(len(categories_to_save), 0)
 total_cat = np.full(len(categories_to_save), 0)
@@ -64,7 +64,7 @@ for example in range(0, len(image_list)):
 		if frameData.annotation2D[j].size < 3:
 			print("DEBUG")
 			continue
-		
+
 		#Create an empty image to add mask polygon
 		mask = np.zeros((frameData.imgRGB.shape[0], frameData.imgRGB.shape[1], 1), dtype=np.uint8)
 		#Add polygon to the image
@@ -75,15 +75,15 @@ for example in range(0, len(image_list)):
 		for cat_idx, cat in enumerate(categories_to_save):
 
 			if frameData.labels2D[j].lower().find(cat) != -1:
-				
+
 
 				if (frameData.labels2D[j].lower() != cat):
 					unknown_masks = unknown_masks + 1
 					#print(frameData.labels2D[j])
-				
-				
+
+
 				cat_present[cat_idx] = True
-				total_cat[cat_idx] = total_cat[cat_idx] + 1 
+				total_cat[cat_idx] = total_cat[cat_idx] + 1
 
 				#Create a mask name
 				mask_name = cat+'_'+'{0:03}'.format(cat_saved[cat_idx])+'.png'
@@ -96,7 +96,7 @@ for example in range(0, len(image_list)):
 
 				#Save the image
 				cv2.imwrite(os.path.join(masks_save_dir, mask_name), mask)
-				
+
 				break
 
 	#Save image only if any label was already saved
@@ -104,13 +104,13 @@ for example in range(0, len(image_list)):
 		#cv2.imwrite(os.path.join(example_save_dir, '{0:06}'.format(example)+'.jpg'), frameData.imgRGB)
 		#cv2.imwrite(os.path.join(example_save_dir, '{0:06}'.format(example)+'_depth.jpg'), frameData.imgRGB)
 		cv2.imwrite(os.path.join(example_save_dir, 'rgb.jpg'), frameData.imgRGB)
-		
+
 
 	for idx, present in enumerate(cat_present):
 		if present:
-			examples_with_cat[idx] = examples_with_cat[idx] + 1		
-	
-	
+			examples_with_cat[idx] = examples_with_cat[idx] + 1
+
+
 for cat_idx, cat in enumerate(categories_to_save):
 	print("Files with ", cat, ": ", examples_with_cat[cat_idx])
 

@@ -14,21 +14,21 @@ ROOT_DIR = os.path.abspath("../")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
-sys.path.insert(0,'/home/adllo/others_git/Mask_RCNN/mrcnn')  # To find local version of the library
+sys.path.insert(0,'/maskrcnn/mrcnn')  # To find local version of the library
 from mrcnn import utils
 import mrcnn.model as modellib
 from mrcnn import visualize
 # Import Maritime config
 sys.path.append(os.path.join(ROOT_DIR, "samples/coco/"))  # To find local version
 import maritime
- 
+
 
 # Directory to save logs and trained model
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Local path to trained weights file
-#MARITIME_MODEL_PATH = os.path.join("/home/adllo/others_git/Mask_RCNN/mrcnn/logs/100_images/mask_rcnn_maritime_0160.h5")
-MARITIME_MODEL_PATH = os.path.join("/home/adllo/others_git/Mask_RCNN/mrcnn/saved_weights/100_images/mask_rcnn_maritime_0160.h5")
+#MARITIME_MODEL_PATH = os.path.join("/maskrcnn/mrcnn/logs/100_images/mask_rcnn_maritime_0160.h5")
+MARITIME_MODEL_PATH = os.path.join("/maskrcnn/mrcnn/saved_weights/100_images/mask_rcnn_maritime_0160.h5")
 
 class InferenceConfig(maritime.MaritimeConfig):
     # Set batch size to 1 since we'll be running inference on
@@ -96,7 +96,7 @@ def create_masked_image(image, masks, class_ids):
 	# Generate random colors
 	N = masks.shape[-1]
 	#print("Number of instances: " + str(N))
-	#if (N == 0): 
+	#if (N == 0):
 	#	return image.astype(np.uint8)
 
 	# Show area outside image boundaries.
@@ -104,7 +104,7 @@ def create_masked_image(image, masks, class_ids):
 	masked_image = image.astype(np.uint32).copy()
 
 	for i in range(N):
-	
+
 		#Label
 		class_id = class_ids[i]
 		label = class_names[class_id]
@@ -113,14 +113,14 @@ def create_masked_image(image, masks, class_ids):
 		global colors
 		color = colors[class_id]
 		#print(color)
-		'''		
+		'''
 		#Save sky mask
 		if (label=='sky'):
 			#mask_sky  = cv2.cvtColor(masks[:, :, i].dtype='uint8', cv2.COLOR_BGR2GRAY)
 			mask_sky  = masks[:, :, i].dtype='uint8'
 			print(mask_sky)
 			mask_sky_bool = True
-		'''		
+		'''
 		# Mask
 		mask = masks[:, :, i]
 		masked_image = apply_mask(masked_image, mask, color, 0.5)
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
 	while(True):
 
-		
+
 		#start=time.time()
 		### Capture frame-by-frame
 		ret, frame = cap.read()
@@ -172,15 +172,10 @@ if __name__ == '__main__':
 		cv2.imshow('Mask_rcnn results',masked_image)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 		    break
-		
-	   
+
+
 
 
 	# When everything done, release the capture
 	cap.release()
 	cv2.destroyAllWindows()
-
-
-
-
-

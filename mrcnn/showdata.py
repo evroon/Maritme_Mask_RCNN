@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description='Show image with masks')
 parser.add_argument("image",metavar='N',type = int,help="Image idx")
 args = parser.parse_args()
 
-dataset_dir = "/home/adllo/others_git/Mask_RCNN/Train_own_dataset/maritime_dataset/"
+dataset_dir = "/maskrcnn/Train_own_dataset/maritime_dataset/"
 dataset_type = "training"
 
 #Which image to load

@@ -7,9 +7,9 @@ import ros_numpy as rnp
 
 import os
 import sys
-sys.path.append('/home/adllo/others_git/Mask_RCNN/')
+sys.path.append('/maskrcnn/')
 sys.path.append('/home/adllo/others_git/coco/PythonAPI') #For pycocotools import
-sys.path.append('/home/adllo/others_git/Mask_RCNN/samples/coco/') #For coco import
+sys.path.append('/maskrcnn/samples/coco/') #For coco import
 import random
 import math
 import numpy as np
@@ -38,7 +38,7 @@ from sensor_msgs.msg import Image
 
 
 #ROOT_DIR = os.path.dirname(os.getcwd())
-ROOT_DIR = "/home/adllo/others_git/Mask_RCNN/"
+ROOT_DIR = "/maskrcnn/"
 
 print ("ROOT_DIR: ", ROOT_DIR)
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
@@ -88,7 +88,7 @@ def create_masked_image(image, masks, class_ids):
 
 	# Generate random colors
 	N = masks.shape[-1]
-	
+
 	# Show area outside image boundaries.
 	height, width = image.shape[:2]
 	masked_image = image.astype(np.uint32).copy()
@@ -116,7 +116,7 @@ def image_callback(image):
 	global graph
 	with graph.as_default():
 		results = model.detect([arr], verbose=1)
-	
+
 	# Visualize results
 	t1 = time.time()
 	r = results[0]
@@ -127,7 +127,7 @@ def image_callback(image):
 
 	my_image = rnp.msgify(Image, masked_image, encoding='bgr8')
 	img_pub.publish(my_image)
-   
+
 
 if __name__ == '__main__':
 	rospy.init_node('mask_rcnn_node', anonymous=True)
@@ -136,4 +136,3 @@ if __name__ == '__main__':
 	img_pub = rospy.Publisher('/my_image', Image, queue_size=1)
 
 	rospy.spin()
-

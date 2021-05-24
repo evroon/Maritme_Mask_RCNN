@@ -1,12 +1,12 @@
 import sys
-sys.path.append('/home/adllo/others_git/Mask_RCNN/mrcnn')
+sys.path.append('/maskrcnn/mrcnn')
 
 import maritime
 import matplotlib.pyplot as plt
 import numpy as np
 import utils
 
-dataset_dir = "/home/adllo/others_git/Mask_RCNN/Train_own_dataset/maritime_dataset"
+dataset_dir = "/maskrcnn/Train_own_dataset/maritime_dataset"
 dataset_type = "training"
 
 #Prepare the dataset loader
@@ -39,7 +39,7 @@ for image_idx in dataset_train._image_ids:
 	green_mean = np.mean(green)
 	blue_mean = np.mean(blue)
 
-	cumulative_red = cumulative_red + red_mean 
+	cumulative_red = cumulative_red + red_mean
 	cumulative_green = cumulative_green + green_mean
 	cumulative_blue = cumulative_blue + blue_mean
 
@@ -50,4 +50,3 @@ final_blue = cumulative_blue/len(dataset_train._image_ids)
 print("Mean pixels red channel", final_red)
 print("Mean pixels red channel", final_green)
 print("Mean pixels red channel", final_blue)
-
