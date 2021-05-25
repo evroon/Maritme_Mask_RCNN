@@ -18,7 +18,7 @@ GET MEAN VALUE OF ALL TRAINING IMAGES -> Modify maritime.py
 python mean_pixel.py (in the mrcnn folder)
 
 TRAIN
-python maritime.py --dataset="/maskrcnn/Train_own_dataset/maritime_dataset/" --model="coco"
+python3 mrcnn/maritime.py --dataset="/maskrcnn/Train_own_dataset/maritime_dataset/" --model="coco"
 Weights are saved in 'logs' folder
 
 JUPYTER NOTEBOOK TESTING
