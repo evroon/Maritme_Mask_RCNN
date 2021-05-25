@@ -1929,6 +1929,7 @@ class MaskRCNN(object):
             anchors = np.broadcast_to(anchors, (config.BATCH_SIZE,) + anchors.shape)
 
             # A hack to get around Keras's bad support for constants
+            # This class returns a constant layer
             class ConstLayer(tf.keras.layers.Layer):
                 def __init__(self, x, name=None):
                     super(ConstLayer, self).__init__(name=name)
