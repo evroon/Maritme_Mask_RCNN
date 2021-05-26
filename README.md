@@ -3,7 +3,11 @@
 
 This repository tries to simplify the process of creating a Dataset and training Mask R-CNN from scratch. Specifically, a maritime dataset of 176 images is created which include 5 classes: buoys (green), land (red), sea (dark blue), sky (turquoise) and ships (white). Training this dataset on Mask R-CNN allows the semantic segmentation of live video coming from cameras on board an maritime vessel, enabling it, in the future, to recognize, understand and act upon its surroundings autonomously.
 
-This fork improves the work from Allopart by implementing tensorflow 2.2.0 support, which is merged from [leekunhee](https://github.com/leekunhee/Mask_RCNN/tree/tensorflow2.0)'s tensorflow2.0 branch.
+This fork improves the work from Allopart in these areas:
+* It implements tensorflow 2.4.0 support, which is merged from [alsombra](https://github.com/alsombra/Mask_RCNN-TF2)'s fork.
+* It provides a Docker image and scripts to ensure proper installation of dependencies.
+
+The Docker image is based on nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04.
 
 ![Mask-RCNN on the DTU Maritime Dataset](assets/maritime_intro.png)
 
@@ -17,15 +21,25 @@ The repository includes:
 * Code for running the detection on a simple webcam or under the ROS framework
 
 # Getting Started
+To get started run:
+```bash
+sudo apt install nvidia-container-toolkit
+git clone https://github.com/evroon/mask-rcnn
+cd mask-rcnn
+./build_docker.sh
+./launch_docker.sh
+```
 
-* All code has been tested under the Tensorflow 1.7 environment. Please follow (https://www.tensorflow.org/install/) for more information on how to install tensorflow on your machine.
-
-* Follow [Mask R-CNN](https://github.com/matterport/Mask_RCNN) for installation instructions.
+Now you can train on the maritime dataset:
+```bash
+python3 mrcnn/maritime.py --dataset="/maskrcnn/Train_own_dataset/maritime_dataset/" --model="coco"
+```
+Also see [training_instructions.txt](/Train_own_dataset/training_instructions.txt)
 
 * Create your own dataset: find enough images to represent broadly all the classes you aim to detect. Use the LabelMe python software to create *.json* files that include the polygonal representation of the masked classes. LabelMe can be installed under the tensorflow environment from [LabelMe](https://github.com/wkentaro/labelme) or with:
-   ```bash
-   pip install labelme
-   ```
+```bash
+pip install labelme
+```
 
 * Prepare your dataset: edit the *image_list.txt* and *labels.txt* files accordingly. Convert all *.jpg* files to *.png* if necessary.
 
@@ -37,16 +51,17 @@ The repository includes:
 * Create a validation folder and add some of the training images there (at least one).
 
 * [showdata.py](mrcnn/showdata.py) to visualize the created instance masks. Usage:
-   ```bash
-   python showdata.py N (where N is the number of image in training folder (f.ex. 00025)).
-   ```
+```bash
+python showdata.py N (where N is the number of image in training folder (f.ex. 00025)).
+```
 
 *  Download pre-trained COCO weights (mask_rcnn_coco.h5) from the [releases page](https://github.com/matterport/Mask_RCNN/releases).
 
 * To start training the network please create your own config file or modify [maritime.py](mrcnn/maritime.py). Start training, using the pre-generated COCO weights as starting point, with:
- ```bash
-   python maritime.py --dataset="/path/to/dataset/" --model="coco"
-   ```
+```bash
+python maritime.py --dataset="/path/to/dataset/" --model="coco"
+```
+
 The weights will be saved every epoch in the *logs* folder.
 
 * [maritime.ipynb](mrcnn/maritime.ipynb) to visualize the results through Jupyter Notebook. Some results are shown as follows:
