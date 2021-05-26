@@ -25,4 +25,4 @@ jobs:
       run: ./build_docker.sh
 
     - name: Run
-      run: docker run --rm --volume=$(pwd):/maskrcnn:rw $USER/maskrcnn:latest echo 'test'
+      run: docker run --rm --volume=$(pwd):/maskrcnn:rw evroon/maskrcnn:latest echo 'test'
