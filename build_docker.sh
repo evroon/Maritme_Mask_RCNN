@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t $USER/maskrcnn:latest .
+docker build -t evroon/maskrcnn:latest .
